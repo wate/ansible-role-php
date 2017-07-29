@@ -3,7 +3,6 @@
 php_version: 7.1
 
 php_packages:
-  - php
   - php-common
   - php-cli
   - php-devel
@@ -14,7 +13,6 @@ php_packages:
   - php-pdo
   - php-gd
   - php-xml
-
 
 php_cfg:
   #################
