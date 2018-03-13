@@ -39,7 +39,7 @@ php.iniの内容を定義します
 Dependencies
 ------------
 
-* [repo-epel](https://github.com/wate/ansible-role-repo-remi)
+* [repo-remi](https://github.com/wate/ansible-role-repo-remi)
 
 Example Playbook
 ----------------
