@@ -16,9 +16,11 @@ Dependencies
 Example Playbook
 ----------------
 
-    - hosts: servers
-      roles:
-         - { role: php }
+```yaml
+- hosts: servers
+  roles:
+     - { role: php }
+```
 
 License
 -------
