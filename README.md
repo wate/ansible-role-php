@@ -16,7 +16,7 @@ php_version: 7.0
 
 ### php_packages
 
-インストールするPHPのパッケージの一覧を指定します
+インストールするパッケージを指定します
 
 ```yaml
 php_packages:
