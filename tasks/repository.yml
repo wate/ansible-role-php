@@ -6,7 +6,7 @@
       - apt-transport-https
       - ca-certificates
       - curl
-      - gpg
+      - gnupg
 - name: add apt signing key
   apt_key:
     url: https://packages.sury.org/php/apt.gpg
