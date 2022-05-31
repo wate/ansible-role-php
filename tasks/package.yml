@@ -4,8 +4,10 @@
     name: "{{ item }}"
   loop: "{{ php_packages }}"
 - name: install composer
-  ansible.builtin.apt:
-    name: composer
+  ansible.builtin.get_url:
+    url: https://getcomposer.org/download/{{ php_composer_version }}/composer.phar
+    dest: /usr/local/bin/composer
+    mode: "0755"
 - name: execute update alternatives(php)
   community.general.alternatives:
     name: "{{ item }}"

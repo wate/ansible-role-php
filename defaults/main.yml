@@ -31,3 +31,5 @@ php_cfg: |
 php_cli_cfg: "{{ php_cfg }}"
 php_fpm_cfg: "{{ php_cfg }}"
 php_apache_cfg: "{{ php_cfg }}"
+
+php_composer_version: latest-stable
