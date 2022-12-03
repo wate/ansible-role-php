@@ -1,45 +1,50 @@
 php
-=========
+=================
 
-[![Build Status](https://travis-ci.org/wate/ansible-role-php.svg?branch=master)](https://travis-ci.org/wate/ansible-role-php)
+Setup php
 
-PHPのインストールとセットアップを行います
+OS Platform
+-----------------
+
+### Debian
+
+- bullseye
+- buster
 
 Role Variables
 --------------
 
-### php_version
+### `php_version`
 
-インストールするPHPのバージョンを指定します
+インストールするバージョン  
+※7.0 OR 7.1 OR 7.2 OR 7.3 OR 7.4 OR 8.0 OR 8.1
 
-```yaml
-php_version: 7.4
-```
+### `php_packages`
 
-### php_packages
+インストールするパッケージ
 
-インストールするパッケージを指定します
+### `php_cfg`
 
-```yaml
-php_packages:
-  - php-common
-  - php-cli
-  - php-devel
-  - php-opcache
-  - php-mbstring
-  - php-mysqlnd
-  - php-json
-  - php-pdo
-  - php-gd
-  - php-xml
-```
+PHPの共通設定(全体)
 
-### php_cfg
+### `php_cli_cfg`
 
-php.iniの内容を定義します
+PHPの共通設定(cli)
+
+### `php_fpm_cfg`
+
+PHPの共通設定(php-fpm)
+
+### `php_apache_cfg`
+
+PHPの共通設定(apache)
+
+### `php_composer_version`
+
+インストールするcomposerのバージョン
 
 Example Playbook
-----------------
+--------------
 
 ```yaml
 - hosts: servers
@@ -48,6 +53,6 @@ Example Playbook
 ```
 
 License
--------
+--------------
 
 Apache License 2.0

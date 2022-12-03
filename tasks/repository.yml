@@ -1,5 +1,5 @@
 ---
-- name: install dependency packages
+- name: Install dependency packages
   ansible.builtin.apt:
     update_cache: true
     name:
@@ -7,7 +7,7 @@
       - ca-certificates
       - curl
       - gnupg
-- name: add apt signing key
+- name: Add apt signing key
   ansible.builtin.apt_key:
     url: https://packages.sury.org/php/apt.gpg
     state: present
@@ -16,6 +16,6 @@
     filename: php
     repo: deb https://packages.sury.org/php/ {{ ansible_facts.distribution_release }} main
     state: present
-- name: update package cach
+- name: Update package cache
   ansible.builtin.apt:
     update_cache: true

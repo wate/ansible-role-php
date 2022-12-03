@@ -1,7 +1,13 @@
 ---
-# 7.0 OR 7.1 OR 7.2 OR 7.3 OR 7.4 OR 8.0 OR 8.1
+## ---------
+## インストールするバージョン
+## ※7.0 OR 7.1 OR 7.2 OR 7.3 OR 7.4 OR 8.0 OR 8.1
+## ---------
 php_version: '8.1'
 
+## ---------
+## インストールするパッケージ
+## ---------
 php_packages:
   - php{{ php_version }}-common
   - php{{ php_version }}-cli
@@ -27,10 +33,25 @@ php_packages:
   # - php{{ php_version }}-xdebug
   # - php{{ php_version }}-xhprof
 
+## ---------
+## PHPの共通設定(全体)
+## ---------
 php_cfg: |
   date.timezone = Asia/Tokyo
+## ---------
+## PHPの共通設定(cli)
+## ---------
 php_cli_cfg: "{{ php_cfg }}"
+## ---------
+## PHPの共通設定(php-fpm)
+## ---------
 php_fpm_cfg: "{{ php_cfg }}"
+## ---------
+## PHPの共通設定(apache)
+## ---------
 php_apache_cfg: "{{ php_cfg }}"
 
+## ---------
+## インストールするcomposerのバージョン
+## ---------
 php_composer_version: latest-stable
