@@ -2,12 +2,11 @@
 - name: Verify
   hosts: all
   gather_facts: false
-  # check_mode: true
   tasks:
-    - name: Example assertion
+    - name: Check composer command
+      ansible.builtin.stat:
+        path: /usr/local/bin/composer
+      register: stat_result
+    - name: Assert install composer command
       ansible.builtin.assert:
-        that: true
-    - name: Execute composer command
-      community.general.composer:
-        command: list
-        global_command: true
+        that: stat_result.stat.exists
