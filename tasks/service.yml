@@ -1,5 +1,5 @@
 ---
-- name: php-fpm is active and enabled on system startup
+- name: Service php-fpm is active and enabled on system startup
   ansible.builtin.systemd:
     name: php{{ php_version | string }}-fpm
     state: started
