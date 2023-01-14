@@ -28,19 +28,19 @@ Role Variables
 
 ### `php_cfg`
 
-PHPの共通設定(全体)
+PHPの設定(ベース)
 
 ### `php_cli_cfg`
 
-PHPの共通設定(cli)
+PHPの設定(cli)
 
 ### `php_fpm_cfg`
 
-PHPの共通設定(php-fpm)
+PHPの設定(php-fpm)
 
 ### `php_apache_cfg`
 
-PHPの共通設定(apache)
+PHPの設定(apache)
 
 ### `php_composer_version`
 

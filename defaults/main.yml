@@ -36,20 +36,20 @@ php_packages:
   # - php{{ php_version }}-xhprof
 
 ## ---------
-## PHPの共通設定(全体)
+## PHPの設定(ベース)
 ## ---------
 php_cfg: |
   date.timezone = Asia/Tokyo
 ## ---------
-## PHPの共通設定(cli)
+## PHPの設定(cli)
 ## ---------
 php_cli_cfg: "{{ php_cfg }}"
 ## ---------
-## PHPの共通設定(php-fpm)
+## PHPの設定(php-fpm)
 ## ---------
 php_fpm_cfg: "{{ php_cfg }}"
 ## ---------
-## PHPの共通設定(apache)
+## PHPの設定(apache)
 ## ---------
 php_apache_cfg: "{{ php_cfg }}"
 
