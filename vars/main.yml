@@ -1,4 +1,7 @@
 ---
+php_apt_key_url: https://packages.sury.org/php/apt.gpg
+php_apt_key_dest: /usr/share/keyrings/php.gpg
+
 php_conf_dir: /etc/php/{{ php_version }}
 php_cli_conf_dir: "{{ php_conf_dir }}/cli/conf.d"
 php_fpm_conf_dir: "{{ php_conf_dir }}/fpm/conf.d"
