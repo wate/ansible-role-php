@@ -39,15 +39,28 @@ php_packages:
 ## PHPの設定(ベース)
 ## ---------
 php_cfg: |
+  [Date]
   date.timezone = Asia/Tokyo
+  [Session]
+  session.use_cookies=On
+  session.use_only_cookies=On
+  session.use_strict_mode=On
+  session.cookie_httponly=On
+  #session.cookie_secure=On
+  session.use_trans_sid=Off
+  #session.cache_limiter=private_no_expire
+  #session.cache_expire=180
+
 ## ---------
 ## PHPの設定(cli)
 ## ---------
 php_cli_cfg: "{{ php_cfg }}"
+
 ## ---------
 ## PHPの設定(php-fpm)
 ## ---------
 php_fpm_cfg: "{{ php_cfg }}"
+
 ## ---------
 ## PHPの設定(apache)
 ## ---------
