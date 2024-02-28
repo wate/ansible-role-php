@@ -1,4 +1,5 @@
 ---
+## @see https://packages.sury.org/php/README.txt
 - name: Install dependency packages
   ansible.builtin.apt:
     update_cache: true
@@ -7,16 +8,11 @@
       - ca-certificates
       - curl
       - gnupg
-- name: Add apt signing key
-  ansible.builtin.get_url:
-    url: "{{ php_apt_key_url }}"
-    dest: "{{ php_apt_key_dest }}"
-    mode: "0644"
+- name: Install archive-keyring package
+  ansible.builtin.apt:
+    deb: https://packages.sury.org/debsuryorg-archive-keyring.deb
 - name: Add php repository
   ansible.builtin.apt_repository:
     filename: php
     repo: deb [signed-by={{ php_apt_key_dest }}] https://packages.sury.org/php/ {{ ansible_facts.distribution_release }} main
     state: present
-- name: Update package cache
-  ansible.builtin.apt:
-    update_cache: true
