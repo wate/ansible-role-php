@@ -1,6 +1,6 @@
 ---
 - name: Service php-fpm is active and enabled on system startup
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     name: php{{ php_version | string }}-fpm
     state: started
     enabled: true
