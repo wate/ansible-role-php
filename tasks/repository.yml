@@ -3,6 +3,8 @@
   ansible.builtin.apt:
     update_cache: true
     name:
+      - python3-apt
+      - python3-debian
       - apt-transport-https
       - ca-certificates
       - curl
@@ -12,7 +14,16 @@
   ansible.builtin.apt:
     deb: https://packages.sury.org/debsuryorg-archive-keyring.deb
 - name: Add php repository
-  ansible.builtin.apt_repository:
-    filename: php
-    repo: deb [signed-by={{ php_apt_key_dest }}] https://packages.sury.org/php/ {{ ansible_facts.distribution_release }} main
+  ansible.builtin.deb822_repository:
+    name: php
+    uris: https://packages.sury.org/php/
+    suites: "{{ ansible_facts.distribution_release }}"
+    components: main
+    signed_by: "{{ php_apt_key_dest }}"
+    enabled: true
     state: present
+  register: apt_repo_result
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+  when: apt_repo_result is changed
