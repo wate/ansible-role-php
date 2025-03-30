@@ -1,9 +1,9 @@
 ---
-- name: restart php-fpm
+- name: Restart php-fpm
   ansible.builtin.systemd_service:
     name: php{{ php_version }}-fpm
     state: restarted
-- name: reload php-fpm
+- name: Reload php-fpm
   ansible.builtin.systemd_service:
     name: php{{ php_version }}-fpm
     state: reloaded

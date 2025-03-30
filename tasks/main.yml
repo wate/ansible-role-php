@@ -2,20 +2,16 @@
 - name: Import repository task
   ansible.builtin.import_tasks:
     file: repository.yml
-  tags:
-    - role_php_repository
+  tags: role_php_repository
 - name: Import package task
   ansible.builtin.import_tasks:
     file: package.yml
-  tags:
-    - role_php_package
+  tags: role_php_package
 - name: Import setting task
   ansible.builtin.import_tasks:
     file: setting.yml
-  tags:
-    - role_php_setting
+  tags: role_php_setting
 - name: Import service task
   ansible.builtin.import_tasks:
     file: service.yml
-  tags:
-    - role_php_service
+  tags: role_php_service

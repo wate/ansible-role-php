@@ -18,7 +18,7 @@
 - name: Execute update alternatives(php-dev)
   when: "'php' + (php_version | string) + '-dev' in php_packages"
   block:
-    - name: execute update alternatives(php-dev)
+    - name: Execute update alternatives(php-dev)
       community.general.alternatives:
         name: "{{ item }}"
         path: /usr/bin/{{ item }}{{ php_version }}
@@ -28,7 +28,7 @@
 - name: Execute update alternatives(php-fpm)
   when: "'php' + (php_version | string) + '-fpm' in php_packages"
   block:
-    - name: execute update alternatives(php-fpm)
+    - name: Execute update alternatives(php-fpm)
       community.general.alternatives:
         name: php-fpm.sock
         path: /run/php/php{{ php_version }}-fpm.sock
