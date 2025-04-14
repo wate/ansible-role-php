@@ -1,0 +1,16 @@
+apcu
+bcmath
+behaviour
+cgroupns
+cpus
+dearmor
+envrc
+httponly
+imagick
+mbstring
+mysqlnd
+opcache
+phar
+phpize
+xdebug
+xhprof
