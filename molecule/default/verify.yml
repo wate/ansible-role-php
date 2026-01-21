@@ -2,11 +2,207 @@
 - name: Verify
   hosts: all
   gather_facts: false
+  vars:
+    php_version: "8.5"
   tasks:
+    ## テストの前処理
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+        manager: auto
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+    ## リポジトリのテスト
+    - name: Check Sury PHP repository keyring package
+      ansible.builtin.assert:
+        that:
+          - "'debsuryorg-archive-keyring' in ansible_facts.packages"
+        fail_msg: "Sury PHP repository keyring package is not installed"
+        success_msg: "Sury PHP repository keyring package is installed"
+    - name: Check PHP repository sources file
+      ansible.builtin.stat:
+        path: /etc/apt/sources.list.d/php.sources
+      register: php_repo_sources
+    - name: Assert PHP repository sources file exists
+      ansible.builtin.assert:
+        that: php_repo_sources.stat.exists
+        fail_msg: "PHP repository sources file not found"
+        success_msg: "PHP repository sources file exists"
+    - name: Read PHP repository configuration
+      ansible.builtin.command:
+        cmd: cat /etc/apt/sources.list.d/php.sources
+      register: php_repo_content
+      changed_when: false
+    - name: Assert PHP repository configuration
+      ansible.builtin.assert:
+        that:
+          - "'https://packages.sury.org/php/' in php_repo_content.stdout"
+          - "'Enabled: yes' in php_repo_content.stdout"
+        fail_msg: "PHP repository is not properly configured"
+        success_msg: "PHP repository is properly configured"
+    ## パッケージのテスト
+    - name: Assert PHP packages are installed
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.packages[('php' + php_version + '-common')] is defined
+          - ansible_facts.packages[('php' + php_version + '-cli')] is defined
+          - ansible_facts.packages[('php' + php_version + '-fpm')] is defined
+          - ansible_facts.packages[('php' + php_version + '-curl')] is defined
+          - ansible_facts.packages[('php' + php_version + '-gd')] is defined
+          - ansible_facts.packages[('php' + php_version + '-mbstring')] is defined
+          - ansible_facts.packages[('php' + php_version + '-mysql')] is defined
+          - ansible_facts.packages[('php' + php_version + '-intl')] is defined
+          - ansible_facts.packages[('php' + php_version + '-xml')] is defined
+          - ansible_facts.packages[('php' + php_version + '-zip')] is defined
+        fail_msg: "Some required PHP packages are not installed"
+        success_msg: "All required PHP packages are installed"
+    ## PHPコマンドのテスト
+    - name: Check PHP command exists
+      ansible.builtin.command:
+        cmd: which php
+      register: php_which
+      changed_when: false
+      failed_when: false
+    - name: Assert PHP command exists
+      ansible.builtin.assert:
+        that:
+          - php_which.rc == 0
+          - php_which.stdout | length > 0
+        fail_msg: "PHP command not found"
+        success_msg: "PHP command exists at {{ php_which.stdout }}"
+    - name: Get PHP version
+      ansible.builtin.command: php -v
+      register: php_version_output
+      changed_when: false
+    - name: Display PHP version
+      ansible.builtin.debug:
+        msg: "{{ php_version_output.stdout_lines[0] }}"
+    - name: Assert PHP version is correct
+      ansible.builtin.assert:
+        that:
+          - php_version_output.rc == 0
+          - "'PHP' in php_version_output.stdout"
+        fail_msg: "PHP version check failed"
+        success_msg: "PHP is properly installed"
+    ## PHP設定ファイルのテスト
+    - name: Check PHP CLI configuration file
+      ansible.builtin.stat:
+        path: /etc/php/{{ php_version }}/cli/conf.d/90-custom.ini
+      register: php_cli_conf
+    - name: Assert PHP CLI configuration file exists
+      ansible.builtin.assert:
+        that: php_cli_conf.stat.exists
+        fail_msg: "PHP CLI configuration file not found"
+        success_msg: "PHP CLI configuration file exists"
+    - name: Read PHP CLI configuration
+      ansible.builtin.command:
+        cmd: cat /etc/php/{{ php_version }}/cli/conf.d/90-custom.ini
+      register: php_cli_conf_content
+      changed_when: false
+      failed_when: false
+    - name: Assert PHP timezone configuration
+      ansible.builtin.assert:
+        that:
+          - "'date.timezone = Asia/Tokyo' in php_cli_conf_content.stdout"
+        fail_msg: "PHP timezone not properly configured"
+        success_msg: "PHP timezone is properly configured"
+      when: php_cli_conf_content.rc == 0
+    ## PHP-FPMサービスのテスト
+    - name: Assert PHP-FPM service is running
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['php' + php_version + '-fpm.service'] is defined
+          - ansible_facts.services['php' + php_version + '-fpm.service']['state'] == 'running'
+          - ansible_facts.services['php' + php_version + '-fpm.service']['status'] == 'enabled'
+        fail_msg: "PHP-FPM service is not running or not enabled"
+        success_msg: "PHP-FPM service is running and enabled"
+
+    - name: Check PHP-FPM socket
+      ansible.builtin.stat:
+        path: /run/php/php{{ php_version }}-fpm.sock
+      register: php_fpm_socket
+    - name: Assert PHP-FPM socket exists
+      ansible.builtin.assert:
+        that: php_fpm_socket.stat.exists
+        fail_msg: "PHP-FPM socket not found"
+        success_msg: "PHP-FPM socket exists"
+    - name: Check PHP-FPM configuration file
+      ansible.builtin.stat:
+        path: /etc/php/{{ php_version }}/fpm/conf.d/90-custom.ini
+      register: php_fpm_conf
+    - name: Assert PHP-FPM configuration file exists
+      ansible.builtin.assert:
+        that: php_fpm_conf.stat.exists
+        fail_msg: "PHP-FPM configuration file not found"
+        success_msg: "PHP-FPM configuration file exists"
+    ## PHP拡張モジュールのテスト
+    - name: Check installed PHP modules
+      ansible.builtin.command:
+        cmd: php -m
+      register: php_modules
+      changed_when: false
+    - name: Assert required PHP modules are installed
+      ansible.builtin.assert:
+        that:
+          - "'curl' in php_modules.stdout"
+          - "'gd' in php_modules.stdout"
+          - "'mbstring' in php_modules.stdout"
+          - "'mysqli' in php_modules.stdout"
+          - "'pdo_mysql' in php_modules.stdout"
+          - "'intl' in php_modules.stdout"
+          - "'xml' in php_modules.stdout"
+          - "'zip' in php_modules.stdout"
+        fail_msg: "Some required PHP modules are missing"
+        success_msg: "All required PHP modules are installed"
+    ## Composerのテスト
     - name: Check composer command
       ansible.builtin.stat:
         path: /usr/local/bin/composer
-      register: stat_result
-    - name: Assert install composer command
+      register: composer_stat
+    - name: Assert composer command exists
       ansible.builtin.assert:
-        that: stat_result.stat.exists
+        that: composer_stat.stat.exists
+        fail_msg: "Composer not found"
+        success_msg: "Composer exists"
+    - name: Check composer is executable
+      ansible.builtin.assert:
+        that: composer_stat.stat.executable
+        fail_msg: "Composer is not executable"
+        success_msg: "Composer is executable"
+    - name: Get composer version
+      ansible.builtin.command:
+        cmd: composer --version
+      register: composer_version
+      changed_when: false
+      environment:
+        COMPOSER_ALLOW_SUPERUSER: "1"
+    - name: Assert composer version command works
+      ansible.builtin.assert:
+        that:
+          - composer_version.rc == 0
+          - "'Composer version' in composer_version.stdout"
+        fail_msg: "Composer version check failed"
+        success_msg: "Composer is properly installed"
+    ## PHP基本機能のテスト
+    - name: Test PHP execution with simple script
+      ansible.builtin.command:
+        cmd: php -r "echo 'Hello PHP';"
+      register: php_hello
+      changed_when: false
+    - name: Assert PHP can execute simple script
+      ansible.builtin.assert:
+        that:
+          - php_hello.rc == 0
+          - "'Hello PHP' in php_hello.stdout"
+        fail_msg: "PHP script execution failed"
+        success_msg: "PHP can execute scripts properly"
+    - name: Test PHP ini settings
+      ansible.builtin.command:
+        cmd: php -i
+      register: php_info
+      changed_when: false
+    - name: Assert PHP timezone is correctly set
+      ansible.builtin.assert:
+        that:
+          - "'date.timezone => Asia/Tokyo' in php_info.stdout"
+        fail_msg: "PHP timezone is not set to Asia/Tokyo"
+        success_msg: "PHP timezone is correctly set to Asia/Tokyo"
