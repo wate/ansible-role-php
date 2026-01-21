@@ -8,8 +8,8 @@ OS Platform
 
 ### Debian
 
+- trixie
 - bookworm
-- bullseye
 
 Role Variables
 --------------
@@ -21,8 +21,8 @@ Role Variables
 #### `php_version`
 
 インストールするバージョン  
-対応バージョン：7.4 / 8.0 / 8.1 / 8.2 / 8.3 / **8.4**  
-初期値：8.4
+対応バージョン：7.4 / 8.0 / 8.1 / 8.2 / 8.3 / 8.4 / **8.5**  
+初期値：8.5
 
 #### `php_packages`
 
