@@ -27,7 +27,6 @@ php_packages:
   - php{{ php_version }}-sqlite3
   - php{{ php_version }}-xml
   - php{{ php_version }}-zip
-  - php{{ php_version }}-opcache
   # - php{{ php_version }}-apcu
   # - php{{ php_version }}-redis
   # - php{{ php_version }}-imap
@@ -38,6 +37,7 @@ php_packages:
   # - php{{ php_version }}-xdebug
   # - php{{ php_version }}-xhprof
   # - php{{ php_version }}-ast
+  # - php{{ php_version }}-opcache
   - php{{ php_version }}-fpm
   # - libapache2-mod-php{{ php_version }}
 
