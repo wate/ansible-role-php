@@ -26,7 +26,7 @@ Role Variables
 
 #### `php_packages`
 
-インストールするパッケージ
+インストールするPHP関連パッケージ
 
 #### `php_cfg`
 
