@@ -31,4 +31,5 @@
     - name: Execute update alternatives(php-fpm)
       community.general.alternatives:
         name: php-fpm.sock
+        link: /run/php/php-fpm.sock
         path: /run/php/php{{ php_version }}-fpm.sock
