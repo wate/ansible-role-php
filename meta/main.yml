@@ -1,6 +1,7 @@
 ---
 galaxy_info:
   role_name: php
+  namespace: wate
   author: yoshiaki tanaka
   description: Setup php
   license: Apache
